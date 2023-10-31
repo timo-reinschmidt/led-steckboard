@@ -1,0 +1,62 @@
+public static void main(String[] args) {
+		LedService service = new LedService();
+		showSquare (service);
+	}
+
+	private static void showSquare(LedService service) {
+		// Scanner für Benutzereingabe
+		Scanner sc = new Scanner(System.in);
+		// Validierungsvariabel 0/0 (leer) in der Ecke oben Links des Quadrates
+		int topLeft = 0;
+		int length = 0;
+		boolean valid = true;
+		// Koordinatenpunkte zur manuellen Eingabe
+		int x1;
+		int x2;
+		int y1;
+		int y2;
+
+		service.addLeds(LedService.MAX_NUMBER_OF_LEDS);
+		do {
+			System.out.print("Nennen Sie den TopLeft Punkt: ");
+			// int da es sich um eine gerade Zahl handelt
+			topLeft = sc.nextInt();
+			x1 = topLeft % LedService.MAX_COLUMNS;
+			y1 = topLeft / LedService.MAX_COLUMNS;
+
+			System.out.print("Geben sie die Seitenlänge ihres Quadrates ein: ");
+			length = sc.nextInt();
+			// if Schleife da es nur zwei mögliche Kombinationen gibt die nicht
+			// funktionieren (sonst Array?)
+			if ((x1 - length < 0) || (y1 - length < 0)) {
+				valid = false;
+				System.out.println("Wert darf nicht kleiner als 0 sein!");
+
+			} else if (topLeft == 0 || length == 0 || length == 1) {
+				valid = false;
+				System.out.println("Ungültiger Wert");
+			} else {
+				valid = true;
+			}
+		}
+		// while Schleife zur Wertprüfung der angegebenen Werte
+		while (!valid);
+
+		x2 = x1 - length;
+		y2 = y1 - length;
+		// x steht für Zeilenpunkte, y steht für Reihenpunkte
+		for (int row = y2; row <= y1; row++) {
+			for (int column = x2; column <= x1; column++) {
+				if (column > x2 && row > y2) {
+					service.turnLedOn(column + row * LedService.MAX_COLUMNS);
+
+				} else
+					service.turnLedOff(column + row * LedService.MAX_COLUMNS);
+			}
+		}
+
+		service.stopExecutionFor(5000);
+
+		
+	}
+}
