@@ -1,0 +1,64 @@
+package ch.hslu.prg.led.steckboard;
+
+import ch.hslu.prg.leds.proxy.LedService;
+
+import java.util.Scanner;
+
+public class ClientApp {
+
+	public static void main(String[] args) {
+
+		showRectangle();
+
+	}
+
+	/*
+	 * Erstellen Sie dazu die Methode showRectangle in der Klasse ClientApp, die
+	 * danach in der Methode main aufgerufen wird. In der Methode showRectangle soll
+	 */
+
+	public static void showRectangle() {
+
+		LedService service = new LedService();
+
+		service.addLeds(service.MAX_NUMBER_OF_LEDS);
+
+		Scanner sc = new Scanner(System.in);
+
+		System.out.println("Lesen Sie bitte die Nummer des LEDs ein, dass als \"top left\" figurieren soll: ");
+
+		int topLeft = sc.nextInt();
+
+		System.out.println("Lesen Sie bitte die Nummer des LEDs ein, dass als \"bottom right\" figurieren soll: ");
+
+		int bottomRight = sc.nextInt();
+
+		service.turnLedOn(topLeft);
+
+		service.turnLedOn(bottomRight);
+
+		int row = topLeft / 16;
+
+		int topRight = bottomRight + (row * service.MAX_ROWS);
+
+		int bottomLeft = topLeft % service.MAX_COLUMNS;
+		
+		for (int i = topLeft; i >= 0; i = i - service.MAX_ROWS) {
+			service.turnLedOn(i);
+		}
+
+		for (int i = bottomRight; i <= topRight; i = i + service.MAX_COLUMNS) {
+			service.turnLedOn(i);
+		}
+
+		for (int i = bottomLeft; i >= bottomRight; i--) {
+			service.turnLedOn(i);
+		}
+
+		for (int i = topLeft; i >= topRight; i--) {
+			service.turnLedOn(i);
+		}
+
+	}
+
+}
