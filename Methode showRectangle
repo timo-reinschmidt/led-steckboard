@@ -21,44 +21,62 @@ public class ClientApp {
 
 		LedService service = new LedService();
 
-		service.addLeds(service.MAX_NUMBER_OF_LEDS);
-
 		Scanner sc = new Scanner(System.in);
 
-		System.out.println("Lesen Sie bitte die Nummer des LEDs ein, dass als \"top left\" figurieren soll: ");
+		service.addLeds(service.MAX_NUMBER_OF_LEDS);
 
-		int topLeft = sc.nextInt();
+		int topLeft = 0;
 
-		System.out.println("Lesen Sie bitte die Nummer des LEDs ein, dass als \"bottom right\" figurieren soll: ");
+		int bottomRight = 0;
 
-		int bottomRight = sc.nextInt();
+		do {
+			System.out.println("Bitte geben Sie einen gültigen Wert für den Punkt \"topLeft\" links zuoberst ein.");
+			topLeft = sc.nextInt();
 
-		service.turnLedOn(topLeft);
+			System.out.println("Bitte geben Sie einen gültigen Wert für den Punkt \"bottomRight\" rechts zuunterst ein.");
+			bottomRight = sc.nextInt();
 
-		service.turnLedOn(bottomRight);
+			if (topLeft + 32 >= bottomRight && topLeft <= service.MAX_NUMBER_OF_LEDS
+					&& topLeft % service.MAX_ROWS > bottomRight % service.MAX_ROWS) {
+				break;
+			} else {
+				System.out.println(
+						"Die von Ihnen eingegebenen Werte sind ungültig.\nBitte beachten Sie, dass topLeft kleiner als 255 und um 32 Werteinheiten\ngrösser ist als bottomRight.");
+				System.out.println("Bitte geben Sie die Werte erneut ein.");
+			}
+		} while (true);
 
-		int row = topLeft / 16;
+		int topLeftCol = topLeft % service.MAX_ROWS;
 
-		int topRight = bottomRight + (row * service.MAX_ROWS);
+		int topLeftRow = topLeft / service.MAX_COLUMNS;
 
-		int bottomLeft = topLeft % service.MAX_COLUMNS;
+		int bottomRightCol = bottomRight % service.MAX_ROWS;
+
+		int bottomRightRow = bottomRight / service.MAX_COLUMNS;
+
+		for (int row = topLeftRow; row >= bottomRightRow; row--) {
+			for (int col = topLeftCol; col >= bottomRightCol; col--) {
+				service.turnLedOn(row * service.MAX_COLUMNS + col);
+				service.setDelayInMillis(75);
+			}
+		}
+
+		service.stopExecutionFor(300);
+
+		for (int row = topLeftRow -1 ; row > bottomRightRow; row--) {
+			for (int col = topLeftCol -1 ; col > bottomRightCol; col--) {
+				service.turnLedOff(row * service.MAX_COLUMNS + col);
+				service.setDelayInMillis(300);
+
+			}
+		}
+
+		service.stopExecutionFor(500);
 		
-		for (int i = topLeft; i >= 0; i = i - service.MAX_ROWS) {
-			service.turnLedOn(i);
-		}
-
-		for (int i = bottomRight; i <= topRight; i = i + service.MAX_COLUMNS) {
-			service.turnLedOn(i);
-		}
-
-		for (int i = bottomLeft; i >= bottomRight; i--) {
-			service.turnLedOn(i);
-		}
-
-		for (int i = topLeft; i >= topRight; i--) {
-			service.turnLedOn(i);
-		}
-
+		service.reset();
 	}
+
+	
+	
 
 }
