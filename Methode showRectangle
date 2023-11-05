@@ -17,13 +17,31 @@ public class ClientApp {
 	 * danach in der Methode main aufgerufen wird. In der Methode showRectangle soll
 	 */
 
-	public static void showRectangle() {
+		public static void showRectangle() {
 
 		LedService service = new LedService();
 
 		Scanner sc = new Scanner(System.in);
 
-		service.addLeds(service.MAX_NUMBER_OF_LEDS);
+		String colorStr = null;
+
+		do {
+			System.out.println("Geben Sie für die gewünschte Farbe den entsprechenden Ausdruck ein\n"
+					+ "Zur Auswahl steht: \"RED\" \"GREEN\" \"BLUE\" \"YELLOW\" und \"RANDOM\" für eine zufällige Auswahl.");
+
+			colorStr = sc.next();
+
+			if (colorStr.equals("RED") || colorStr.equals("GREEN") || colorStr.equals("BLUE")
+					|| colorStr.equals("RANDOM")) {
+
+				break;
+			} else {
+
+				System.out.println("Bitte geben Sie den zur Auswahl stehenden Parameter ein.");
+			}
+		} while (true);
+
+		service.addLeds(service.MAX_NUMBER_OF_LEDS, LedColor.valueOf(colorStr));
 
 		int topLeft = 0;
 
@@ -33,7 +51,8 @@ public class ClientApp {
 			System.out.println("Bitte geben Sie einen gültigen Wert für den Punkt \"topLeft\" links zuoberst ein.");
 			topLeft = sc.nextInt();
 
-			System.out.println("Bitte geben Sie einen gültigen Wert für den Punkt \"bottomRight\" rechts zuunterst ein.");
+			System.out
+					.println("Bitte geben Sie einen gültigen Wert für den Punkt \"bottomRight\" rechts zuunterst ein.");
 			bottomRight = sc.nextInt();
 
 			if (topLeft + 32 >= bottomRight && topLeft <= service.MAX_NUMBER_OF_LEDS
@@ -63,20 +82,15 @@ public class ClientApp {
 
 		service.stopExecutionFor(300);
 
-		for (int row = topLeftRow -1 ; row > bottomRightRow; row--) {
-			for (int col = topLeftCol -1 ; col > bottomRightCol; col--) {
+		for (int row = topLeftRow - 1; row > bottomRightRow; row--) {
+			for (int col = topLeftCol - 1; col > bottomRightCol; col--) {
 				service.turnLedOff(row * service.MAX_COLUMNS + col);
-				service.setDelayInMillis(300);
+				service.setDelayInMillis(75);
 
 			}
 		}
 
-		service.stopExecutionFor(500);
-		
+		service.stopExecutionFor(300);
+
 		service.reset();
 	}
-
-	
-	
-
-}
