@@ -1,9 +1,4 @@
-public static void main(String[] args) {
-		LedService service = new LedService();
-		showSquare (service);
-	}
-
-	private static void showSquare(LedService service) {
+private static void showSquare(LedService service) {
 		Scanner sc = new Scanner(System.in);
 		
 		int topLeft = 0;
@@ -24,20 +19,25 @@ public static void main(String[] args) {
 		y1 = topLeft / LedService.MAX_COLUMNS;
 		System.out.print("Geben Sie die Länge Ihres Quadrats ein:");
 		laenge = sc.nextInt();
-		x2 = x1 + laenge -1;
-		y2 = y1 + laenge -1;
-// Schleife um falsche Werte auszuschliessen
-		if ((x2 >= LedService.MAX_COLUMNS) || (y2 >= LedService.MAX_ROWS)) {
+		// Schleife um falsche Werte auszuschliessen
+		if ((x1 >= LedService.MAX_COLUMNS) || (y1 >= LedService.MAX_ROWS)) {
 		value = false;
 		System.out.println("Zu grosser Wert!");
-		
-		} else {
+		} 
+		else if ((x1 <= 0) || (y1 <= 0)) {
+			value = false;
+		System.out.println("Zu kleiner Wert!");
+		}
+		else {
 		value = true;
 		}
 		} while (!value);
 
-		for (int col = x1; col <= x2; col++) {
-		for (int row = y1; row <= y2; row++) {
+		x2 = x1 - laenge;
+		y2 = y1 - laenge;
+		
+		for (int col = x2; col <= x1; col++) {
+		for (int row = y2; row <= y1; row++) {
 		
 		if (col > x2 && row > y2) {
 		service.turnLedOn(col + row * LedService .MAX_COLUMNS);
@@ -48,3 +48,5 @@ public static void main(String[] args) {
 		}
 
 		service.stopExecutionFor(5000);
+		}
+		}
