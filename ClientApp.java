@@ -227,30 +227,30 @@ public class ClientApp {
                     System.out.println("Die Binärdarstellung der eingegebenen Zahl ist: " + binaryString);
                     
                     // 3. LED's hinzufuegen wie lang die Binaer Zahl ist
-                    int numLEDs = binaryString.length();
-                    System.out.println("Es werden " + numLEDs + " LEDs benoetigt.");
+                    int binaryLength = binaryString.length();
+                    System.out.println("Es werden " + binaryLength + " LEDs benoetigt.");
              
                     
                     // 4.2 
-                    int numLEDsRounded = (numLEDs + 7) / 8 * 8; // Auf das nächste Vielfache von 8 aufrunden
-                    System.out.println("Es werden " + numLEDsRounded + " LEDs hinzugefügt.");
+                    int binaryLengthRounded = (binaryLength + 7) / 8 * 8; // Auf das nächste Vielfache von 8 aufrunden
+                    System.out.println("Es werden " + binaryLengthRounded + " LEDs hinzugefügt.");
                     
-                    service.addLeds(numLEDsRounded);
+                    service.addLeds(binaryLengthRounded);
                     // 4. LEDs einschalten wo der character 1 ist im Binaer String
                     char characterAt;
                     
-                    for(int i = 0; i < numLEDs; i++) {
+                    for(int i = 0; i < binaryLength; i++) {
             			characterAt = binaryString.charAt(i);
             			
             			if(characterAt == '1') {
-            				service.turnLedOn(numLEDs -1 -i);
+            				service.turnLedOn(binaryLength -1 -i);
             			}
             			
             		}
                     
-                    //service.stopExecutionFor(4000);
+                    service.stopExecutionFor(4000);
                     
-                    //service.reset();
+                    service.reset();
                     
                 } else {
                     System.out.println("Die eingegebene Zahl ist nicht positiv. Versuchen Sie es erneut.");
