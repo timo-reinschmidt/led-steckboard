@@ -14,14 +14,14 @@ public class ClientApp {
 
 	public static void main(String[] args) {
 		LedService service = new LedService();
-		//ledsOnOff(service);
-		//switchRandom(service);
+		ledsOnOff(service);
+		switchRandom(service);
 		showBinary(service);
 		
 		
 
 	}
-/*	
+	
 	// Aufgabe 1.1
 	public static void ledsOnOff(LedService service) {
 		int ledsCount = 0;
@@ -86,21 +86,16 @@ public class ClientApp {
 		service.reset();
 		
 	}
-*/
-/*	
+	
 	// Aufgabe 3
 	public static void switchRandom(LedService service) {
 		
-		// Variablen
-		int half;
+		// Variablen deklarieren
+		int halfLEDCount = 0;
 		int ledsCount = 0;
-
-		
-		// 1. Einlesen eines Vielfachen von 16	
-		// Variables 
-		
 		boolean isTooBig = false;
 		
+		// 1. Einlesen eines Vielfachen von 16	
 		do {
 			System.out.print("Geben Sie eine Zahl eines Vielfachen von 16 ein (Maximum 256): ");
 			ledsCount = sc.nextInt();
@@ -115,8 +110,7 @@ public class ClientApp {
 			
 		} while (isTooBig);
 		
-
-		// Ueberpruefung anzahlLED/16 teilbar
+		// Schauen ob die Anzahl LEDs durch 16 teilbar ist
 		if (ledsCount % 16 == 0) {
 
 		} else {		
@@ -126,57 +120,55 @@ public class ClientApp {
 			}
 		}
 		
-		// 2. LEDs dem Steckboard hinzufügen und 2 Sekunden anhalten
+		// 2. LEDs hinzufügen und 2 Sekunden anhalten
 		service.addLeds(ledsCount, LedColor.RANDOM);				
 		service.stopExecutionFor(2000);
-
-		Random random = new Random();
 		
-		// 8.) Schritte 3 - 8, 3x wiederholen
+		// 8. Aufgabe 3-8 3mal wiederholen
 		for (int r = 0; r <= 3; r++) {
 		
-			// 3. Haelfte aller LEDs mit java.util.Random einschalten
-			half = ledsCount / 2;
-			int sizeFull = ledsCount;		
+			// 3. Hälfte aller LEDs einschalten
+			halfLEDCount = ledsCount / 2;
+			int fullLEDCount = ledsCount;		
 	
-			// Erstellung Array und Random Obj
-			int[] arr = new int[sizeFull];
+			// Array und Random Objekt erstellen
+			int[] arr = new int[fullLEDCount];
 			
 			for (int i = 0; i < arr.length; i++) {
 				
 				int randomNummer;
 	
-				boolean exklusiv = false;
+				boolean uniqueNumber = false;
 				
 				do {
-					// Zufaellige Nummer erstellen
+					// Random Nummer erstellen
 					randomNummer = random.nextInt(ledsCount); 
 	
-					// Ueberpruefen ob Nummer schon existiert
-					exklusiv = true;
+					// Schauen ob die Nummer schon existiert
+					uniqueNumber = true;
 					for (int x = 0; x < i; x++) {
 						
 						if (randomNummer == arr[x]) {
-							exklusiv = false;
+							uniqueNumber = false;
 							break;
 						}
 					}
-				} while (!exklusiv);        
+				} while (!uniqueNumber);        
 	
-				// Random Nummer in Array hinzufuegen
+				// Random Nummer in Array hinzufügen
 				arr[i] = randomNummer;
 			}
 	
-			// Lampen anschalten
-			for (int i = 0; i < half; i++) {
+			// LEDs einschalten
+			for (int i = 0; i < halfLEDCount; i++) {
 				
 				service.turnLedOn(arr[i]);
 			}
 			
-			// 4. Methode 1 Sekunde anhalten
+			// 4. 1 Sekunde anhalten
 			service.stopExecutionFor(1000);
 		
-			// 5. Switch LedON / LedOFF
+			// 5. LEDs ein- oder aus-schalten
 			for (int i = 0; i < arr.length; i++) {
 				
 				if (service.isOn(arr[i])) {
@@ -187,10 +179,10 @@ public class ClientApp {
 				}
 			}
 			
-			// 6. Methode 1 sekunde anhalten
+			// 6. 1 sekunde anhalten
 			service.stopExecutionFor(1000);
 			
-			// 7. Alle LEDS ausschalten und Methode fuer 1 Sekunde anhalten
+			// 7. LEDs ausschalten und für 1 Sekunde anhalten
 			for (int i = 0; i < arr.length; i++) {
 				
 				if (service.isOn(arr[i])) {
@@ -200,12 +192,10 @@ public class ClientApp {
 			service.stopExecutionFor(1000);
 		}
 		
-		// 9. Anzeige zuruecksetzen
+		// 9. Reset vom Program machen
 		service.reset();
 	}
 	
-*/	
-///*
 	// Aufgabe 4
 	public static void showBinary(LedService service) {
 		
@@ -215,35 +205,39 @@ public class ClientApp {
 
         while (!validInput) {
             System.out.print("Bitte geben Sie eine positive ganze Zahl ein: ");
+            
             if (sc.hasNextInt()) {		// Es wird überprüft, ob die Eingabe eine ganze Zahl ist
                 number = sc.nextInt();	// wenn ja, wird diese in der number Variable gespeichert
+                
                 if (number > 0) {
                 	
                 	validInput = true;
                 	// Schritt 2: Umwandlung in eine Binärzahl
-                    String binaryString = Integer.toBinaryString(number);
+                    binaryString = Integer.toBinaryString(number);
 
                     // Ausgabe der Binärzahl
-                    System.out.println("Die Binärdarstellung der eingegebenen Zahl ist: " + binaryString);
+                    //System.out.println("Die Binärdarstellung der eingegebenen Zahl ist: " + binaryString); -> zum testen gewesen
                     
                     // 3. LED's hinzufuegen wie lang die Binaer Zahl ist
                     int binaryLength = binaryString.length();
-                    System.out.println("Es werden " + binaryLength + " LEDs benoetigt.");
+                    // System.out.println("Es werden " + binaryLength + " LEDs benoetigt."); -> zum testen gewesen
              
                     
                     // 4.2 
                     int binaryLengthRounded = (binaryLength + 7) / 8 * 8; // Auf das nächste Vielfache von 8 aufrunden
-                    System.out.println("Es werden " + binaryLengthRounded + " LEDs hinzugefügt.");
+                    //System.out.println("Es werden " + binaryLengthRounded + " LEDs hinzugefügt."); -> zum testen gewesen
                     
                     service.addLeds(binaryLengthRounded);
-                    // 4. LEDs einschalten wo der character 1 ist im Binaer String
+                    
+                    // 4. LEDs einschalten wo der character 1 ist im Binär String
                     char characterAt;
                     
                     for(int i = 0; i < binaryLength; i++) {
             			characterAt = binaryString.charAt(i);
             			
             			if(characterAt == '1') {
-            				service.turnLedOn(binaryLength -1 -i);
+            				int position = binaryLength -1 -i;
+            				service.turnLedOn(position);
             			}
             			
             		}
@@ -262,5 +256,4 @@ public class ClientApp {
             }
         }	
 	}
-//*/
 }
