@@ -1,0 +1,36 @@
+public static void main(String[] args) {
+		LedService service = new LedService();
+		showBorder(service);
+	
+		}
+	
+	public static void showBorder (LedService service) {
+		//Max Anzahl der LED's Generieren	
+		service.addLeds(LedService.MAX_NUMBER_OF_LEDS);
+		
+		service.stopExecutionFor(2000);
+		
+		//Lampen am Seitenrand werden durch Modulo erruiert
+		//Lampen am Seitenrand L,R werden +16 gerechnet
+		for(int seiten = 0; seiten < LedService.MAX_COLUMNS; seiten++) {
+			if(seiten % 16 == 0 || seiten % 16 == 15)
+			service.turnLedOn(seiten);}
+		//Wenn Seiten (oben unten) kleiner als 15 oder grösser als 240 wird +1 gerechnet
+		for(int oben = 256; oben > 240; oben--){
+				service.turnLedOn(oben);}
+
+		for(int unten = 0; unten < 15; unten++) {
+				service.turnLedOn (unten);}
+		
+		//
+		service.stopExecutionFor(5000);
+		
+		service.turnLedOff(oben);
+		service.turnLedOff(unten);
+		service.turnLedOff(seiten);
+		
+		service.stopExecutionFor(2000);
+		
+		service.reset();
+		}
+}	
