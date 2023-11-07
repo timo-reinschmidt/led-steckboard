@@ -1,0 +1,74 @@
+package ch.hslu.prg.led.steckboard;
+ 
+import java.util.Scanner;
+ 
+import ch.hslu.prg.leds.proxy.LedColor;
+import ch.hslu.prg.leds.proxy.LedService;
+ 
+public class aufgabe06 {
+ 
+	public static void main(String[] args) {
+ 
+		showSquare();
+ 
+	}
+ 
+	public static void showSquare() {
+ 
+		LedService service = new LedService();
+ 
+		Scanner sc = new Scanner(System.in);
+ 
+		String colorStr = null;
+ 
+		service.addLeds(service.MAX_NUMBER_OF_LEDS);
+ 
+		int topLeft = 0;
+ 
+		int lengthSide = 0;
+		System.out.println("Bitte geben Sie einen gültigen Wert für den Punkt \"topLeft\" links zuoberst ein. ");
+		topLeft = sc.nextInt();
+ 
+		System.out.println("Bitte geben Sie einen gültigen Wert für Seitenlänge ein. ");
+		lengthSide = sc.nextInt();
+/*
+		do {
+ 
+			System.out.println("Bitte geben Sie einen gültigen Wert für den Punkt \"topLeft\" links zuoberst ein. ");
+			topLeft = sc.nextInt();
+ 
+			System.out.println("Bitte geben Sie einen gültigen Wert für Seitenlänge ein. ");
+			lengthSide = sc.nextInt();
+ 
+			if ((topLeft % service.MAX_COLUMNS) + lengthSide <= service.MAX_COLUMNS) {
+				break;
+			} else {
+ 
+				System.out.println(
+						"Bitte geben Sie einen gültigen Wert für den Punkt links oben und die Seitenlänge an. ");
+			}
+		} while (true);*/
+ 
+		int topLeftCol = topLeft % service.MAX_ROWS;
+ 
+		int topLeftRow = topLeft / service.MAX_COLUMNS;
+ 
+		int topRightLength = topLeftCol - lengthSide - 1;
+ 
+		int bottomRightLength = topLeftRow - lengthSide -1;
+ 
+		for (int row = topLeftRow; row >= bottomRightLength; row--) {
+			for (int col = topLeftCol; col >= topRightLength; col--) {
+				service.turnLedOn(row * service.MAX_COLUMNS + col);
+ 
+			}
+		}
+ 
+		for (int row = topLeftRow - 1; row > bottomRightLength; row--) {
+			for (int col = topLeftCol - 1; col > topRightLength; col--) {
+				service.turnLedOff(row * service.MAX_COLUMNS + col);
+ 
+			}
+		}
+	}
+}
