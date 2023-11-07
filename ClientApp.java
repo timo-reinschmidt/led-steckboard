@@ -17,6 +17,10 @@ public class ClientApp {
 		ledsOnOff(service);
 		switchRandom(service);
 		showBinary(service);
+<<<<<<< Updated upstream
+=======
+		//showRectangle(service);
+>>>>>>> Stashed changes
 		
 		
 
@@ -142,10 +146,24 @@ public class ClientApp {
 				
 				do {
 					// Random Nummer erstellen
+<<<<<<< Updated upstream
+=======
+					/* Zufallszahl zwischen 0 und ledsCount generiert und 
+					 * in randomNummer gespeichert.
+					 */
+>>>>>>> Stashed changes
 					randomNummer = random.nextInt(ledsCount); 
 	
 					// Schauen ob die Nummer schon existiert
 					uniqueNumber = true;
+<<<<<<< Updated upstream
+=======
+					
+					/* Schleife prüft, ob die generierte Zufallszahl bereits in einem 
+					 * der vorherigen Array-Elemente existiert, indem sie durch die 
+					 * vorherigen Elemente von arr geht
+					 */
+>>>>>>> Stashed changes
 					for (int x = 0; x < i; x++) {
 						
 						if (randomNummer == arr[x]) {
@@ -153,6 +171,12 @@ public class ClientApp {
 							break;
 						}
 					}
+<<<<<<< Updated upstream
+=======
+				/* Schleife wird mindestens einmal ausgeführt, und die Schleife 
+				 * wird so lange wiederholt, wie uniqueNumber false ist
+				 */
+>>>>>>> Stashed changes
 				} while (!uniqueNumber);        
 	
 				// Random Nummer in Array hinzufügen
@@ -169,6 +193,14 @@ public class ClientApp {
 			service.stopExecutionFor(1000);
 		
 			// 5. LEDs ein- oder aus-schalten
+<<<<<<< Updated upstream
+=======
+			
+			/* Dies ist eine Schleife, die von i = 0 bis i = arr.length - 1 durchläuft, 
+			 * wobei arr ein Array von LEDs darstellt. Die Schleife geht durch jedes 
+			 * Element des Arrays.
+			 */
+>>>>>>> Stashed changes
 			for (int i = 0; i < arr.length; i++) {
 				
 				if (service.isOn(arr[i])) {
@@ -232,10 +264,26 @@ public class ClientApp {
                     // 4. LEDs einschalten wo der character 1 ist im Binär String
                     char characterAt;
                     
+<<<<<<< Updated upstream
                     for(int i = 0; i < binaryLength; i++) {
             			characterAt = binaryString.charAt(i);
             			
             			if(characterAt == '1') {
+=======
+                    for(int i = 0; i < binaryLength; i++) {  // Schleife für jedes Zeichen im Binärstring einmal durchlaufen
+            			
+                    	/* In jeder Iteration der Schleife wird das Zeichen an der Position i im binaryString 
+                    	 * in der Variable characterAt gespeichert. 
+                    	 */
+                    	characterAt = binaryString.charAt(i);
+            			
+            			if(characterAt == '1') { // Es wird überprüft, ob das Zeichen in characterAt gleich '1' ist
+            				
+            				/* Wenn das Zeichen '1' ist, wird die Position, an der die LED eingeschaltet 
+            				 * werden soll, berechnet. Diese Position entspricht binaryLength - 1 - i und 
+            				 * basiert auf der Position des '1'-Zeichens im Binärstring.
+            				 */
+>>>>>>> Stashed changes
             				int position = binaryLength -1 -i;
             				service.turnLedOn(position);
             			}
@@ -256,4 +304,8 @@ public class ClientApp {
             }
         }	
 	}
+<<<<<<< Updated upstream
 }
+=======
+}
+>>>>>>> Stashed changes
