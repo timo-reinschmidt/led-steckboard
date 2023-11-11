@@ -18,28 +18,26 @@ public class ClientApp {
 		LedService service = new LedService();
 		// ledsOnOff(service);
 		// switchEvenOdd(service);
-		// siebDesEratothenes(service);
-		// countColors(service);
-		// countColorsExt(service);
-		// showBinary(service);
-		// showRectangle(service);
 		// switchRandom(service);
+		// showBinary(service);
 		// showBorder(service);
 		// showSquare(service);
-		showTriangle(service);
+		// showRectangle(service);
+		// showTriangle(service);
+		// siebDesEratothenes(service);
+		// countColors(service);
+		 countColorsExt(service);
 
 	}
 
 	// Aufgabe 1
 	public static void ledsOnOff(LedService service) {
+		// Variablen
 		int ledsCount = 0;
 		String colorStr = null;
-
-		Scanner sc = new Scanner(System.in);
-		// Variables
-
 		boolean isTooBig = false;
 
+		// Anzahl LEDs abfragen
 		do {
 			System.out.print("Geben Sie die Anzahl der LEDs ein (Maximum 256): ");
 			ledsCount = sc.nextInt();
@@ -54,6 +52,7 @@ public class ClientApp {
 		} while (isTooBig);
 
 		// Aufgabe 1.2
+		// Farbe abfragen
 		boolean isCorrect = false;
 		do {
 
@@ -76,14 +75,14 @@ public class ClientApp {
 		for (int i = 0; i < 3; i++) {
 			for (int k = 0; k < ledsCount; k++) {
 				service.turnLedOn(k);
-				service.setDelayInMillis(200);
+				service.setDelayInMillis(50);
 			}
 
 			service.stopExecutionFor(250);
 
 			for (int l = ledsCount - 1; l >= 0; l--) {
 				service.turnLedOff(l);
-				service.setDelayInMillis(200);
+				service.setDelayInMillis(50);
 			}
 
 			service.stopExecutionFor(250);
@@ -96,13 +95,13 @@ public class ClientApp {
 
 	// Aufgabe 2
 	public static void switchEvenOdd(LedService service) {
-
-		Scanner sc = new Scanner(System.in);
+		// Variablen
 		int ledsCount = 0;
 		int counter = 0;
 		boolean isSixteenStep = true;
 		boolean isThree = true;
 
+		// Anzahl LEDs eingeben
 		do {
 			System.out.print("Geben sie die Anzahl der LEDs ein (Die Zahl muss durch 16 teilbar sein): ");
 			ledsCount = sc.nextInt();
@@ -115,12 +114,12 @@ public class ClientApp {
 
 		service.addLeds(ledsCount, LedColor.BLUE);
 
-		//
+		// LEDs an und aus machen in blau
 		do {
 			for (int i = 0; i < ledsCount; i++) {
 				if (i % 2 == 0) {
 					service.turnLedOn(i);
-					service.setDelayInMillis(200);
+					service.setDelayInMillis(50);
 				}
 			}
 
@@ -129,11 +128,11 @@ public class ClientApp {
 			for (int i = 0; i < ledsCount; i++) {
 				if (i % 2 == 0) {
 					service.turnLedOff(i);
-					service.setDelayInMillis(200);
+					service.setDelayInMillis(50);
 
 				} else {
 					service.turnLedOn(i);
-					service.setDelayInMillis(200);
+					service.setDelayInMillis(50);
 				}
 
 			}
@@ -142,7 +141,7 @@ public class ClientApp {
 
 			for (int i = 0; i < ledsCount; i++) {
 				service.turnLedOff(i);
-				service.setDelayInMillis(200);
+				service.setDelayInMillis(50);
 			}
 
 			service.stopExecutionFor(1000);
@@ -152,24 +151,23 @@ public class ClientApp {
 			}
 		} while (isThree);
 
+		service.reset();
+
 	}
 
 	// Aufgabe 3
 	public static void switchRandom(LedService service) {
 
-		// Variablen
-		int half;
+		// Variablen deklarieren
+		int halfLEDCount = 0;
 		int ledsCount = 0;
-
-		// 1. Einlesen eines Vielfachen von 16
-		// Variables
-
 		boolean isTooBig = false;
 
+		// 1. Einlesen eines Vielfachen von 16
 		do {
 			System.out.print("Geben Sie eine Zahl eines Vielfachen von 16 ein (Maximum 256): ");
 			ledsCount = sc.nextInt();
-			if (ledsCount > LedService.MAX_NUMBER_OF_LEDS) {
+			if (ledsCount > service.MAX_NUMBER_OF_LEDS) {
 				isTooBig = true;
 				System.out.println("Geben Sie eine Zahl KLEINER als 256 ein!");
 			} else {
@@ -179,9 +177,8 @@ public class ClientApp {
 
 		} while (isTooBig);
 
-		// Ueberpruefung anzahlLED/16 teilbar
+		// Schauen ob die Anzahl LEDs durch 16 teilbar ist
 		if (ledsCount % 16 == 0) {
-
 		} else {
 			while (ledsCount % 16 != 0) {
 				System.out.print("Dies ist kein vielfaches von 16, geben Sie eine neue Zahl ein: ");
@@ -189,57 +186,75 @@ public class ClientApp {
 			}
 		}
 
-		// 2. LEDs dem Steckboard hinzufügen und 2 Sekunden anhalten
+		// 2. LEDs hinzufügen und 2 Sekunden anhalten
 		service.addLeds(ledsCount, LedColor.RANDOM);
 		service.stopExecutionFor(2000);
 
-		Random random = new Random();
+		// 8. Aufgabe 3-8 3mal wiederholen
+		for (int r = 0; r < 3; r++) {
 
-		// 8.) Schritte 3 - 8, 3x wiederholen
-		for (int r = 0; r <= 3; r++) {
+			// 3. Hälfte aller LEDs einschalten
+			halfLEDCount = ledsCount / 2;
+			int fullLEDCount = ledsCount;
 
-			// 3. Haelfte aller LEDs mit java.util.Random einschalten
-			half = ledsCount / 2;
-			int sizeFull = ledsCount;
-
-			// Erstellung Array und Random Obj
-			int[] arr = new int[sizeFull];
+			// Array und Random Objekt erstellen
+			int[] arr = new int[fullLEDCount];
 
 			for (int i = 0; i < arr.length; i++) {
 
 				int randomNummer;
 
-				boolean exklusiv = false;
+				boolean uniqueNumber = false;
 
 				do {
-					// Zufaellige Nummer erstellen
+					// Random Nummer erstellen
+					/*
+					 * Zufallszahl zwischen 0 und ledsCount generiert und in randomNummer
+					 * gespeichert.
+					 */
 					randomNummer = random.nextInt(ledsCount);
 
-					// Ueberpruefen ob Nummer schon existiert
-					exklusiv = true;
+					// Schauen ob die Nummer schon existiert
+					uniqueNumber = true;
+
+					/*
+					 * Schleife prüft, ob die generierte Zufallszahl bereits in einem der vorherigen
+					 * Array-Elemente existiert, indem sie durch die vorherigen Elemente von arr
+					 * geht
+					 */
 					for (int x = 0; x < i; x++) {
 
 						if (randomNummer == arr[x]) {
-							exklusiv = false;
+							uniqueNumber = false;
 							break;
 						}
 					}
-				} while (!exklusiv);
 
-				// Random Nummer in Array hinzufuegen
+					/*
+					 * Schleife wird mindestens einmal ausgeführt, und die Schleife wird so lange
+					 * wiederholt, wie uniqueNumber false ist
+					 */
+				} while (!uniqueNumber);
+
+				// Random Nummer in Array hinzufügen
 				arr[i] = randomNummer;
 			}
 
-			// Lampen anschalten
-			for (int i = 0; i < half; i++) {
+			// LEDs einschalten
+			for (int i = 0; i < halfLEDCount; i++) {
 
 				service.turnLedOn(arr[i]);
 			}
 
-			// 4. Methode 1 Sekunde anhalten
+			// 4. 1 Sekunde anhalten
 			service.stopExecutionFor(1000);
 
-			// 5. Switch LedON / LedOFF
+			// 5. LEDs ein- oder aus-schalten
+			/*
+			 * Dies ist eine Schleife, die von i = 0 bis i = arr.length - 1 durchläuft,
+			 * wobei arr ein Array von LEDs darstellt. Die Schleife geht durch jedes Element
+			 * des Arrays.
+			 */
 			for (int i = 0; i < arr.length; i++) {
 
 				if (service.isOn(arr[i])) {
@@ -250,20 +265,21 @@ public class ClientApp {
 				}
 			}
 
-			// 6. Methode 1 sekunde anhalten
+			// 6. 1 sekunde anhalten
 			service.stopExecutionFor(1000);
 
-			// 7. Alle LEDS ausschalten und Methode fuer 1 Sekunde anhalten
+			// 7. LEDs ausschalten und für 1 Sekunde anhalten
 			for (int i = 0; i < arr.length; i++) {
 
 				if (service.isOn(arr[i])) {
 					service.turnLedOff(arr[i]);
 				}
 			}
+
 			service.stopExecutionFor(1000);
 		}
 
-		// 9. Anzeige zuruecksetzen
+		// 9. Reset vom Program machen
 		service.reset();
 	}
 
@@ -276,41 +292,55 @@ public class ClientApp {
 
 		while (!validInput) {
 			System.out.print("Bitte geben Sie eine positive ganze Zahl ein: ");
+
 			if (sc.hasNextInt()) { // Es wird überprüft, ob die Eingabe eine ganze Zahl ist
 				number = sc.nextInt(); // wenn ja, wird diese in der number Variable gespeichert
+
 				if (number > 0) {
 
 					validInput = true;
-					// Schritt 2: Umwandlung in eine Binärzahl
-					String binaryString = Integer.toBinaryString(number);
 
+					// Schritt 2: Umwandlung in eine Binärzahl
+					binaryString = Integer.toBinaryString(number);
 					// Ausgabe der Binärzahl
-					System.out.println("Die Binärdarstellung der eingegebenen Zahl ist: " + binaryString);
 
 					// 3. LED's hinzufuegen wie lang die Binaer Zahl ist
-					int numLEDs = binaryString.length();
-					System.out.println("Es werden " + numLEDs + " LEDs benoetigt.");
+					int binaryLength = binaryString.length();
 
 					// 4.2
-					int numLEDsRounded = (numLEDs + 7) / 8 * 8; // Auf das nächste Vielfache von 8 aufrunden
-					System.out.println("Es werden " + numLEDsRounded + " LEDs hinzugefügt.");
+					int binaryLengthRounded = (binaryLength + 7) / 8 * 8; // Auf das nächste Vielfache von 8 aufrunden
 
-					service.addLeds(numLEDsRounded);
-					// 4. LEDs einschalten wo der character 1 ist im Binaer String
+					service.addLeds(binaryLengthRounded);
+
+					// 4. LEDs einschalten wo der character 1 ist im Binär String
 					char characterAt;
 
-					for (int i = 0; i < numLEDs; i++) {
+					for (int i = 0; i < binaryLength; i++) { // Schleife für jedes Zeichen im Binärstring einmal
+																// durchlaufen
+
+						/*
+						 * In jeder Iteration der Schleife wird das Zeichen an der Position i im
+						 * binaryString in der Variable characterAt gespeichert.
+						 */
 						characterAt = binaryString.charAt(i);
 
-						if (characterAt == '1') {
-							service.turnLedOn(numLEDs - 1 - i);
+						if (characterAt == '1') { // Es wird überprüft, ob das Zeichen in characterAt gleich '1' ist
+
+							/*
+							 * Wenn das Zeichen '1' ist, wird die Position, an der die LED eingeschaltet
+							 * werden soll, berechnet. Diese Position entspricht binaryLength - 1 - i und
+							 * basiert auf der Position des '1'-Zeichens im Binärstring.
+							 */
+
+							int position = binaryLength - 1 - i;
+							service.turnLedOn(position);
 						}
 
 					}
 
-					// service.stopExecutionFor(4000);
+					service.stopExecutionFor(4000);
 
-					// service.reset();
+					service.reset();
 
 				} else {
 					System.out.println("Die eingegebene Zahl ist nicht positiv. Versuchen Sie es erneut.");
@@ -326,13 +356,17 @@ public class ClientApp {
 	// Aufgabe 5
 	public static void showBorder(LedService service) {
 
+		// Liste für den Rahme
+
 		List<Integer> turnedOn = new ArrayList<Integer>();
 		LedColor color = readLedColor();
 
+		// Max Anzahl LEDs eingeben
 		service.addLeds(LedService.MAX_NUMBER_OF_LEDS, color);
 
 		service.stopExecutionFor(2000);
 
+		// Rahmen einzeichnen
 		for (int row = 0; row < LedService.MAX_ROWS; row++) {
 			for (int column = 0; column < LedService.MAX_COLUMNS; column++) {
 				int i = (LedService.MAX_COLUMNS * row) + column;
@@ -367,9 +401,14 @@ public class ClientApp {
 
 	}
 
+	// Aufgabe 5.2
 	private static LedColor readLedColor() {
+
+		// Variabeln
 		String colorStr = null;
 		boolean isCorrect = false;
+
+		// Farbe abfragen
 		do {
 
 			System.out.print("Geben Sie die gewünschte Farbe ein (RED, BLUE, YELLOW, RANDOM): ");
@@ -386,19 +425,19 @@ public class ClientApp {
 
 	}
 
-	// Aufgabe 6
+	// Aufgabe 6 ALT
 	public static void showSquare(LedService service) {
 
-		Scanner sc = new Scanner(System.in);
-
+		// Variablen
 		String colorStr = null;
-
-		service.addLeds(service.MAX_NUMBER_OF_LEDS);
-
 		int topLeft = 0;
 		int lengthSide = 0;
-		boolean isCorrect = true;
+		boolean isCorrect = false;
 
+		// Max LEDs hinzufuegen
+		service.addLeds(LedService.MAX_NUMBER_OF_LEDS);
+
+		// Wert für TopLeft und Seitenlaenge abfragen
 		do {
 
 			System.out.println("Bitte geben Sie einen gültigen Wert für den Punkt \"topLeft\" links zuoberst ein. ");
@@ -407,24 +446,29 @@ public class ClientApp {
 			System.out.println("Bitte geben Sie einen gültigen Wert für Seitenlänge ein. ");
 			lengthSide = sc.nextInt();
 
-			if (((topLeft + 1) % service.MAX_COLUMNS) + lengthSide < service.MAX_COLUMNS
+			// ?
+			if (((topLeft + 1) % LedService.MAX_COLUMNS) + lengthSide < LedService.MAX_COLUMNS
 					&& topLeft / LedService.MAX_ROWS >= lengthSide) {
 				isCorrect = false;
 			}
 
-		} while (isCorrect);
+		} while (isCorrect == true);
 
-		int topLeftCol = topLeft % service.MAX_ROWS;
+		// Eckpunkteberechnung
 
-		int topLeftRow = topLeft / service.MAX_COLUMNS;
+		int topLeftCol = topLeft % LedService.MAX_ROWS;
+
+		int topLeftRow = topLeft / LedService.MAX_COLUMNS;
 
 		int topRightLength = topLeftCol - lengthSide + 1;
 
 		int bottomRightLength = topLeftRow - lengthSide + 1;
 
+		// Quadrat einzeichnen
+
 		for (int row = topLeftRow; row >= bottomRightLength; row--) {
 			for (int col = topLeftCol; col >= topRightLength; col--) {
-				service.turnLedOn(row * service.MAX_COLUMNS + col);
+				service.turnLedOn(row * LedService.MAX_COLUMNS + col);
 				service.setDelayInMillis(50);
 
 			}
@@ -432,18 +476,19 @@ public class ClientApp {
 
 		for (int row = topLeftRow - 1; row > bottomRightLength; row--) {
 			for (int col = topLeftCol - 1; col > topRightLength; col--) {
-				service.turnLedOff(row * service.MAX_COLUMNS + col);
+				service.turnLedOff(row * LedService.MAX_COLUMNS + col);
 				service.setDelayInMillis(50);
 
 			}
 		}
 
 		// Aufgabe 6.2
+		// Diagonale einzeichnen
 		int row = topLeftRow;
 
 		for (int col = topLeftCol; col > topLeftCol - lengthSide; col--) {
 
-			service.turnLedOn(row * service.MAX_COLUMNS + col);
+			service.turnLedOn(row * LedService.MAX_COLUMNS + col);
 			service.setDelayInMillis(50);
 			row--;
 		}
@@ -451,21 +496,28 @@ public class ClientApp {
 
 		for (int col = topLeftCol; col > topLeftCol - lengthSide; col--) {
 
-			service.turnLedOn(row * service.MAX_COLUMNS + col);
+			service.turnLedOn(row * LedService.MAX_COLUMNS + col);
 			service.setDelayInMillis(50);
 			row++;
 		}
 
 		service.stopExecutionFor(5000);
-		service.reset();
+		// service.reset();
 	}
 
 	// Aufgabe 7
 	public static void showRectangle(LedService service) {
 
-		Scanner sc = new Scanner(System.in);
-
 		String colorStr = null;
+		boolean isCorrect = true;
+		boolean isCorrectTwo = true;
+		int topLeft = 0;
+		int bottomRight = 0;
+
+		// Eingabe der Farbe des Leds für das Steckbord.
+		// Überprüfung, ob die Farbe, richtig eingegeben wurde.
+		// Sofern die Eingabe nicht mit den Parametern übereinstimmt, wird der User
+		// aufgefordert, diese neu einzugeben.
 
 		do {
 			System.out.print("Geben Sie für die gewünschte Farbe den entsprechenden Ausdruck ein\n"
@@ -474,20 +526,23 @@ public class ClientApp {
 			colorStr = sc.next();
 
 			if (colorStr.equals("RED") || colorStr.equals("GREEN") || colorStr.equals("BLUE")
-					|| colorStr.equals("RANDOM")) {
-
-				break;
-			} else {
-
-				System.out.print("Bitte geben Sie den zur Auswahl stehenden Parameter ein.");
+					|| colorStr.equals("YELLOW") || colorStr.equals("RANDOM")) {
+				isCorrect = false;
 			}
-		} while (true);
+		} while (isCorrect);
+
+		// Hinizufügen der Leds und der Farbe dieser.
 
 		service.addLeds(LedService.MAX_NUMBER_OF_LEDS, LedColor.valueOf(colorStr));
 
-		int topLeft = 0;
+		// Einlesen der Punkte TopLeft und BottomRight.
 
-		int bottomRight = 0;
+		// Kontrollschleife, ob die eingegebenen Werte benutzt werden können, um ein
+		// Rechteck abzubilden.
+		// Kontrolle, ob der eingegebene Punkt TopLeft tatsächlich links von
+		// BottomRight.
+		// Kontrolle, ob der Punkt TopLeft auch auf dem Steckbord unter der Beschränkung
+		// der maximalen Anzahl der Leds abgebildet werden kann.
 
 		do {
 			System.out.print("Bitte geben Sie einen gültigen Wert für den Punkt \"topLeft\" links zuoberst ein: ");
@@ -499,22 +554,33 @@ public class ClientApp {
 
 			if (topLeft + 32 >= bottomRight && topLeft <= LedService.MAX_NUMBER_OF_LEDS
 					&& topLeft % LedService.MAX_ROWS > bottomRight % LedService.MAX_ROWS) {
-				break;
-			} else {
-				System.out.println(
-						"Die von Ihnen eingegebenen Werte sind ungültig.\nBitte beachten Sie, dass topLeft kleiner als 255 und um 32 Werteinheiten\ngrösser ist als bottomRight.");
-				System.out.print("Bitte geben Sie die Werte erneut ein: ");
+				isCorrectTwo = false;
 			}
-		} while (true);
+		} while (isCorrectTwo);
+
+		// Ableitung der zweidimensionalen Navigationspunkte für den Ort über Reihen und
+		// Spalten für beide eingegebenen Werte.
 
 		int topLeftCol = topLeft % LedService.MAX_ROWS;
+		// Gibt die Spaltenzahl von TopLeft aus.
 
 		int topLeftRow = topLeft / LedService.MAX_COLUMNS;
+		// Gibt die Reihenzahl von TopLeft aus.
 
 		int bottomRightCol = bottomRight % LedService.MAX_ROWS;
+		// Gibt die Spaltenzahl von BottomRight aus.
 
 		int bottomRightRow = bottomRight / LedService.MAX_COLUMNS;
+		// Gibt die Reihenzahl von BottomRight aus.
 
+		// In der ersten Schleife werden die einzelnen Reihen von oben nach unten
+		// durchgegangen.
+		// In der inneren Schleife werden je Reihe die Spalten von Links nach Rechts
+		// durchgegangen.
+		// Über den Service und die Formel row * 16 + col wird bestimmt, welche Led auf
+		// dem Steckbord angemacht wird.
+		// Durch die definierten Punkte wird somit das Rechteck ausgefüllt, da zumal von
+		// oben nach unten und von links nach rechts durchgezählt wird.
 		for (int row = topLeftRow; row >= bottomRightRow; row--) {
 			for (int col = topLeftCol; col >= bottomRightCol; col--) {
 				service.turnLedOn(row * LedService.MAX_COLUMNS + col);
@@ -522,8 +588,14 @@ public class ClientApp {
 			}
 		}
 
-		service.stopExecutionFor(300);
+		service.stopExecutionFor(3000);
 
+		// Für das Ausschalten wurde zusätzlich der Parameter -1 hinzugefügt und über
+		// den Service turnOff die Leds ausgeschaltet.
+		// Wegen dem Parameter -1 beginnt der Code im Inneren des Rechtecks (da die
+		// Zählung eine Reihe darunter und eine Spalte weiter rechtsbeginnt.
+		// Über die -1 und die Operatore > statt >= wird gewährleistet, dass der Rahmen
+		// nicht ausgeschaltet wird.
 		for (int row = topLeftRow - 1; row > bottomRightRow; row--) {
 			for (int col = topLeftCol - 1; col > bottomRightCol; col--) {
 				service.turnLedOff(row * LedService.MAX_COLUMNS + col);
@@ -532,47 +604,36 @@ public class ClientApp {
 			}
 		}
 
-		service.stopExecutionFor(300);
+		service.stopExecutionFor(3000);
 
 		service.reset();
 	}
 
-	// Aufgbae 8
-	public static void triangle(LedService service) {
-
-		int row = 0;
-		service.addLeds(LedService.MAX_NUMBER_OF_LEDS);
-
-		int hoehe = 7;
-		int startPoint = LedService.MAX_COLUMNS - 1;
-
-		for (int col = startPoint; col > startPoint - hoehe; col--) {
-			for (row = 0; row < LedService.MAX_COLUMNS - col; row++) {
-				service.turnLedOn(row * service.MAX_COLUMNS + col);
-				service.setDelayInMillis(200);
-			}
-
-		}
-
-		for (int col = startPoint - hoehe; col >= startPoint - (2 * hoehe - 2); col--) {
-			for (row = 0; row < col - hoehe - 1; row++) {
-				service.turnLedOn(row * service.MAX_COLUMNS + col);
-				service.setDelayInMillis(200);
-			}
-
-		}
-
-	}
-
-	// Aufgabe 8 final
-
+	// Aufgabe 8
 	public static void showTriangle(LedService service) {
 
 		int heightTriangle = 0;
-
-		Scanner sc = new Scanner(System.in);
-
 		String colorStr = null;
+		boolean isCorrect = true;
+		boolean isCorrectTwo = true;
+		int anzahlLeds = 0;
+		int startPoint = 0;
+		int row = 0;
+		int col = 0;
+
+		do {
+			System.out.print(
+					"Geben Sie für die gewünschte Farbe den entsprechenden Ausdruck ein\nZur Auswahl steht: \"RED\" \"GREEN\" \"BLUE\" \"YELLOW\" und \"RANDOM\" für eine zufällige Auswahl: ");
+
+			colorStr = sc.next();
+
+			if (colorStr.equals("RED") || colorStr.equals("GREEN") || colorStr.equals("BLUE")
+					|| colorStr.equals("YELLOW") || colorStr.equals("RANDOM")) {
+
+				isCorrect = false;
+			}
+
+		} while (isCorrect);
 
 		// Festlegung von gültigen Parametern. Beschränkung bei 8, da für die
 		// Gleichschenkiligkeit des Dreiecks die Formel 2*höhe-1 verwendet wird und
@@ -580,94 +641,79 @@ public class ClientApp {
 		// Einlesen der gültigen Parameter,
 
 		do {
-			System.out.println("Bitte geben Sie einen gültigen Wert für die Höhe des anzuzeigenden Dreiecks ein:");
+			System.out.print("Bitte geben Sie einen gültigen Wert für die Höhe des anzuzeigenden Dreiecks ein: ");
 
 			heightTriangle = sc.nextInt();
 
 			if (heightTriangle >= 2 && heightTriangle <= 8) {
-				break;
-			} else {
-				System.out.println("Bitte geben Sie eine geeignete Höhe zwischen 2 und 8 ein.");
+				isCorrectTwo = false;
 			}
 
-		} while (true);
+		} while (isCorrectTwo);
 
 		// Nach erfolgreiche Eingabe der Parameter wird die entsprechende Anzahl an Leds
 		// hinzugefügt.
 
-		int anzahlLeds = 0;
-
 		anzahlLeds = heightTriangle * LedService.MAX_ROWS;
 
-		service.addLeds(anzahlLeds);
+		service.addLeds(anzahlLeds, LedColor.valueOf(colorStr));
 
 		// Definition von Eckdaten für die Abbildung des Dreiecks.
 
-		int startPoint = 0;
-
 		startPoint = LedService.MAX_COLUMNS - 1;
-
-		int row = 0;
-
-		int col = 0;
-
-		int endPoint = 0;
 
 		// Abbildung der ersten Hälfte des Dreiecks.
 
 		for (col = startPoint; col > startPoint - heightTriangle; col--) {
 			for (row = 0; row < LedService.MAX_COLUMNS - col; row++) {
-				service.turnLedOn(row * service.MAX_COLUMNS + col);
+				service.turnLedOn(row * LedService.MAX_COLUMNS + col);
 				service.setDelayInMillis(50);
 			}
 
 		}
-		int colZwei = startPoint - heightTriangle;
+
+		int colSecond = startPoint - heightTriangle;
+
 		for (col = startPoint - heightTriangle; col > 0; col--) {
-			colZwei++;
-			;
-			for (row = 0; row < LedService.MAX_COLUMNS - colZwei; row++) {
+			colSecond++;
 
-				service.turnLedOn(row * service.MAX_COLUMNS + col - 16);
+			for (row = 0; row < LedService.MAX_COLUMNS - colSecond; row++) {
+
+				service.turnLedOn(row * LedService.MAX_COLUMNS + col - LedService.MAX_COLUMNS);
 				service.setDelayInMillis(50);
 			}
 		}
+		service.stopExecutionFor(5000);
 
-		// Abbildung der zweiten Hälfte des Dreiecks. Hier ist das Problem
-
-		/*
-		 * for (col = startPoint - heightTriangle; col >= startPoint - (2 *
-		 * heightTriangle - 2); col--) { for (row = 0; row <= col % (heightTriangle -
-		 * 1); row++) {
-		 * 
-		 * service.turnLedOn(row * service.MAX_COLUMNS + col);
-		 * service.setDelayInMillis(50); }
-		 * 
-		 * }
-		 */
+		service.reset();
 	}
 
 	// Aufgabe 9
 	public static void siebDesEratothenes(LedService service) {
-
+		// Max LEDs hinzufuegen
 		service.addLeds(LedService.MAX_NUMBER_OF_LEDS);
-
+		
+		// Alle LEDs an
 		for (int i = 0; i < LedService.MAX_NUMBER_OF_LEDS; i++) {
 			service.turnLedOn(i);
 		}
+		
+		// 1 ist keine Primzahl
 		service.turnLedOff(1);
+		
+		// Schalte aus wenn es teilbar durch 2 ist und nicht die Zahl 2 ist
 		for (int i = 0; i < LedService.MAX_NUMBER_OF_LEDS; i++) {
 			if (i % 2 == 0 && i != 2) {
 				service.turnLedOff(i);
 			}
 		}
-
+		
+		// Schalte alle LEDs aus die ein vielfaches von i sind aber nicht die Zahl i sind
 		for (int i = 3; i < LedService.MAX_NUMBER_OF_LEDS; i++) {
 			if (service.isOn(i)) {
 				for (int k = 2; k <= 255; k++) {
 					if (k % i == 0 && k != i) {
 						service.turnLedOff(k);
-						System.out.println(k);
 					}
 				}
 			}
@@ -675,6 +721,7 @@ public class ClientApp {
 
 	}
 
+	// Aufgabe 10.1
 	// Aufgabe 10.1
 	public static void countColors(LedService service) {
 		int red = 0;
@@ -710,10 +757,11 @@ public class ClientApp {
 		System.out.println(">> YELLOW: " + yellow + " LEDs");
 
 	}
-
+	
+	// Aufgabe 10.2
 	// Aufgabe 10.2
 	public static void countColorsExt(LedService service) {
-
+		// Arrays erstellen
 		int[] arr = new int[4];
 		int[] biggest = new int[4];
 		int[] row = new int[4];
@@ -721,14 +769,16 @@ public class ClientApp {
 		/*
 		 * 0 = Blau 1 = Rot 2 = Gruen 3 = Gelb
 		 */
-
+		
+		// Alle LEDs an
 		service.addLeds(LedService.MAX_NUMBER_OF_LEDS, LedColor.RANDOM);
 		for (int i = 0; i < LedService.MAX_NUMBER_OF_LEDS; i++) {
 			service.turnLedOn(i);
 		}
-		// LedService.MAX_NUMBER_OF_LEDS
+	
 		service.stopExecutionFor(2000);
 
+		// Fuer jede Farbe zaehlen 
 		for (int i = 0; i < LedService.MAX_ROWS; i++) {
 			for (int k = 0; k < LedService.MAX_COLUMNS; k++) {
 				LedColor color = service.color((i * LedService.MAX_ROWS) + k);
@@ -746,7 +796,7 @@ public class ClientApp {
 				}
 
 			}
-
+		// Die Zeile mit den meisten LEDs der jeweiligen Farbe abspeichern
 			for (int l = 0; l < 4; l++) {
 				if (arr[l] >= biggest[l]) {
 					biggest[l] = arr[l];
@@ -759,6 +809,8 @@ public class ClientApp {
 			}
 
 		}
+		
+		// Ranking ausgeben
 
 		System.out.println(">> BLUE: " + biggest[0] + " LEDs" + " in der Zeile-Nr. " + row[0]);
 		System.out.println(">> RED: " + biggest[1] + " LEDs" + " in der Zeile-Nr. " + row[1]);
